@@ -1,0 +1,2012 @@
+{
+  "name": "n8n Blueprint - Nicholas Hennell-Foley",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Receive hire decision from any source').item.json.params.decision }}",
+                    "rightValue": "interview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "fe87af7d-c652-4042-8344-60a8839b2bb2"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "interview"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6e68930d-e69e-48f4-88bc-62cca6d2e740",
+                    "leftValue": "={{ $('Receive hire decision from any source').item.json.params.decision }}",
+                    "rightValue": "decline",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "decline"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "82b03ddc-8eac-4f0c-817c-b34a9a22a156",
+                    "leftValue": "={{ $('Receive hire decision from any source').item.json.params.decision }}",
+                    "rightValue": "fully-accept",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "fully accept"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -544,
+        368
+      ],
+      "id": "b89fbbad-84ba-4500-bd4b-589e5f5367ee",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "pageTitle",
+              "renameField": true,
+              "outputFieldName": "forProgressField"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        1232
+      ],
+      "id": "c0907932-bf71-4765-b6b9-b487aca2cae2",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "88c37075-9948-4ec1-ac60-9f05143f889f",
+              "leftValue": "={{ $json.webParts && $json.webParts.some(wp => wp.webPartType === 'd81ff3d3-e958-4d07-bded-cd6843714eec') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        1232
+      ],
+      "id": "6182f443-391d-417b-a241-83da5755eace",
+      "name": "File embeds only"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "process-action",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1968,
+        400
+      ],
+      "id": "7590f012-21bb-4341-9d46-a3a782c6355d",
+      "name": "Receive hire decision from any source",
+      "webhookId": "1213964f-7ed7-4738-a4d1-4cfbdfa4483f",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cancel-action",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1536,
+        1712
+      ],
+      "id": "519e2817-b01b-4708-b6d8-537e10797837",
+      "name": "Receive cancel action request",
+      "webhookId": "5eb57f0c-6ff1-443e-9bcb-ec3fc402f305",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bbbab5f7-1ed8-4d5d-8ec9-994c0d3d90ab",
+              "leftValue": "={{ $json.query.executionId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1312,
+        1712
+      ],
+      "id": "af497244-8613-4793-8956-b25b5c970661",
+      "name": "Request contains execution ID?"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Bad request.",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1088,
+        1808
+      ],
+      "id": "6bfa70c3-4a1f-450d-a7ed-00aaba189f93",
+      "name": "No, respond appropriately"
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "operation": "delete",
+        "executionId": "={{ $json.query.executionId }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -1088,
+        1616
+      ],
+      "id": "bb28a2e6-983a-4dce-828d-2eebd9a40c87",
+      "name": "Yes, stop the execution",
+      "credentials": {
+        "n8nApi": {
+          "id": "EhVx6qkRChdEKDL0",
+          "name": "n8n account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "= <html><body style=\"font-family: sans-serif\"> <h2>We received your request.</h2> <p>Processing will start automatically in about 1 minute.</p> <form action=\"{{ $json.cancelUrl }}\" method=\"post\"> <button type=\"submit\" style=\"padding:10px 16px\">Cancel</button> </form> </body></html>",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              },
+              {
+                "name": "charset",
+                "value": "utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1520,
+        400
+      ],
+      "id": "76783c38-d3d0-4bfe-b58f-393c765ef4ba",
+      "name": "Respond: Confirmation + cancel option"
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "temp_password",
+        "encodingType": "base64",
+        "stringLength": 16
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        1680
+      ],
+      "id": "26c180e3-e657-4f3b-8a29-d0f5d36955e3",
+      "name": "Generate temp password"
+    },
+    {
+      "parameters": {
+        "jsCode": "const arr = $input.first().json.value || [];\nreturn arr.map(item => ({ json: item }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        1232
+      ],
+      "id": "710c8602-bc0a-45ca-8068-79675002cd3b",
+      "name": "Allow data to be iterated"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/sites/yourSiteId/pages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -176,
+        1248
+      ],
+      "id": "5173aee5-e37a-4043-98c9-24806bc0e7e0",
+      "name": "Get onboarding training module pages",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "izPgayzdowxCDrv0",
+          "name": "Microsoft"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/sites/yourTenantId.sharepoint.com,yourSiteId/pages/{{ $json.id }}/microsoft.graph.sitePage?$expand=webparts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        352,
+        1232
+      ],
+      "id": "82042999-a309-4b51-9161-29e6735f90e4",
+      "name": "List sharepoint webparts on page",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "izPgayzdowxCDrv0",
+          "name": "Microsoft"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://graph.microsoft.com/v1.0/sites/yourTenantId.sharepoint.com:/Sites/yourSiteId:/lists/yourListId/items/{{ $('Receive hire decision from any source').item.json.params.itemId }}/fields",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"IsOnOnboardingProgressList\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1504,
+        1216
+      ],
+      "id": "da463a77-e7f4-4cce-9ccc-b88035efa62e",
+      "name": "Set processed flag in CRM",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "izPgayzdowxCDrv0",
+          "name": "Microsoft"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "accountEnabled": false,
+        "displayName": "={{ $('Query CRM for most up to date data').fields.firstName.toTitleCase() }} {{ $('Query CRM for most up to date data').fields.lastName.toTitleCase() }}",
+        "userPrincipalName": "={{ $('Query CRM for most up to date data').fields.firstName.toLowerCase() }}.{{ $('Query CRM for most up to date data').fields.lastName.toLowerCase() }}@example.com",
+        "mailNickname": "={{ $('Query CRM for most up to date data').fields.firstName.toTitleCase() }}{{ $('Query CRM for most up to date data').fields.lastName.toTitleCase() }}",
+        "password": "={{ $json.temp_password }}!",
+        "additionalFields": {
+          "employeeType": "Volunteer",
+          "employeeHireDate": "={{ $('Query CRM for most up to date data').fields.startDate }}",
+          "givenName": "={{ $('Query CRM for most up to date data').fields.firstName.toTitleCase() }}",
+          "forceChangePassword": "forceChangePasswordNextSignInWithMfa",
+          "surname": "={{ $('Query CRM for most up to date data').fields.lastName.toTitleCase() }}",
+          "mobilePhone": "=+{{ $('Query CRM for most up to date data').fields.phone }}"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.microsoftEntra",
+      "typeVersion": 1,
+      "position": [
+        48,
+        1680
+      ],
+      "id": "c0943c1c-3b1e-4e9d-8c1c-a79ffe31e6d4",
+      "name": "Create user in Microsoft, don't enable account",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "notesInFlow": false,
+      "credentials": {
+        "microsoftEntraOAuth2Api": {
+          "id": "TrzJmS4pKml6p1eV",
+          "name": "Microsoft Entra ID (Azure Active Directory) account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b314f36b-1f1c-4477-a616-204efad209b7",
+              "name": "pageTitle",
+              "value": "=<div>🕒 {{ $json.title }}</div>",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        1232
+      ],
+      "id": "3a85f3c9-17cc-452e-9633-bc5a7ab4ccb8",
+      "name": "Prep text for training progress list"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Query CRM for most up to date data').item.json.fields.Email.Description }}",
+        "subject": "Welcome Aboard!",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        912
+      ],
+      "id": "f47af0d1-03fb-4432-b9d7-cd0cf95307c2",
+      "name": "Email welcome and onboarding instructions",
+      "webhookId": "bc2eb193-a30b-4c26-82bd-b6a02cdac1c2",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CNYx8lhu7TPot4VT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <title>Application Outcome</title>\n    <style type=\"text/css\">\n      /* Reset + client fixes */\n      html, body { margin:0 !important; padding:0 !important; height:100% !important; width:100% !important; }\n      * { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }\n      table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; }\n      table { border-spacing:0 !important; border-collapse:collapse !important; table-layout:fixed !important; margin:0 auto !important; }\n      img { -ms-interpolation-mode:bicubic; border:0; outline:none; text-decoration:none; }\n      a { text-decoration:none; }\n      a[x-apple-data-detectors], .unstyle-auto-detected-links a, .aBn { border-bottom:0 !important; text-decoration:none !important; color:inherit !important; }\n      .button:hover { filter: brightness(1.05); }\n      /* Mobile styles */\n      @media screen and (max-width: 600px) {\n        .container { width:100% !important; }\n        .px-24 { padding-left:24px !important; padding-right:24px !important; }\n        .py-24 { padding-top:24px !important; padding-bottom:24px !important; }\n        .stack { display:block !important; width:100% !important; }\n        .text-center { text-align:center !important; }\n      }\n    </style>\n  </head>\n  <body style=\"background-color:#F7F6F3; margin:0; padding:0;\">\n    <!-- Preheader (hidden) -->\n    <div style=\"display:none; font-size:1px; color:#F7F6F3; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;\">\n      Thank you for your application—on this occasion we won’t be progressing to interview.\n    </div>\n\n    <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" bgcolor=\"#F7F6F3\">\n      <tr>\n        <td align=\"center\" style=\"padding:24px;\">\n          <!-- Card -->\n          <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" class=\"container\" style=\"width:600px; max-width:100%; background-color:#FFFFFF; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06);\">\n            <!-- Accent bar -->\n            <tr>\n              <td style=\"background:linear-gradient(90deg, #F2D28A 0%, #E0A53A 50%, #C78623 100%); height:6px; font-size:0; line-height:0;\">&nbsp;</td>\n            </tr>\n\n            <!-- Header -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:28px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;\">\n                <div style=\"text-align:center;\">\n                  <div style=\"color:#9A7A3C; text-transform:uppercase; letter-spacing:1.6px; font-weight:600; font-size:12px;\">Your Organisation</div>\n                  <h1 style=\"margin:10px 0 0 0; font-size:26px; line-height:1.35; color:#1D3557; font-weight:700;\">\n                    Application Outcome\n                  </h1>\n                </div>\n              </td>\n            </tr>\n\n            <!-- Body copy -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:14px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">Dear {{ $json.firstName }},</p>\n                <p style=\"margin:0 0 12px 0;\">\n                  Thank you for your application and for the time and care you put into it.\n                </p>\n                <p style=\"margin:0 0 12px 0;\">\n                  After careful consideration, we won’t be progressing your application to the next stage on this occasion.\n                </p>\n              </td>\n            </tr>\n\n            <!-- Closing -->\n            <tr>\n              <td class=\"px-24 py-24\" style=\"padding:22px 32px 28px 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">Thank you again for your interest.</p>\n                <p style=\"margin:0;\">\n                  With warm wishes,<br>\n                  Recruitment Team\n                </p>\n              </td>\n            </tr>\n\n            <!-- Footer -->\n            <tr>\n              <td style=\"background-color:#FBFAF7; padding:16px 20px; text-align:center; border-top:1px solid #F1EDE5;\">\n                <div style=\"font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#8B7353; font-size:12px; line-height:1.6;\">\n                  This message was sent by our organisation. If you received it by mistake, please disregard.\n                </div>\n              </td>\n            </tr>\n          </table>\n\n          <!-- Spacer -->\n          <div style=\"height:32px; line-height:32px; font-size:32px;\">&nbsp;</div>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        304
+      ],
+      "id": "304f2977-9a5b-404f-a111-09929578249d",
+      "name": "Prepare decline email template"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Query CRM for most up to date data').item.json.fields.Email.Description }}",
+        "subject": "Application Outcome",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        304
+      ],
+      "id": "78e4356e-c087-491f-b0bf-e6adec916f9c",
+      "name": "Send decline email to applicant",
+      "webhookId": "a359a9f5-12e2-4463-a024-ec5c88584e37",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CNYx8lhu7TPot4VT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://yourTenantName.sharepoint.com/Sites/yourSiteName/_api/web/lists/getbytitle('yourListName')/items({{ $('Receive hire decision from any source').item.json.params.itemId }})",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=verbose"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "If-Match",
+              "value": "*"
+            },
+            {
+              "name": "X-HTTP-Method",
+              "value": "MERGE"
+            },
+            {
+              "name": "X-RequestDigest",
+              "value": "{form_digest_value}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Status",
+              "value": "Declined"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -176,
+        496
+      ],
+      "id": "be699ca7-08a2-4c29-9b97-7d7a45d8b734",
+      "name": "Move to declined stage in CRM",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "3V9p029G3kthk4EQ",
+          "name": "Sharepoint"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "html": "<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <title>Interview Invitation</title>\n    <style type=\"text/css\">\n      /* Reset + client fixes */\n      html, body { margin:0 !important; padding:0 !important; height:100% !important; width:100% !important; }\n      * { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }\n      table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; }\n      table { border-spacing:0 !important; border-collapse:collapse !important; table-layout:fixed !important; margin:0 auto !important; }\n      img { -ms-interpolation-mode:bicubic; border:0; outline:none; text-decoration:none; }\n      a { text-decoration:none; }\n      a[x-apple-data-detectors], .unstyle-auto-detected-links a, .aBn { border-bottom:0 !important; text-decoration:none !important; color:inherit !important; }\n      .button:hover { filter: brightness(1.05); }\n      /* Mobile styles */\n      @media screen and (max-width: 600px) {\n        .container { width:100% !important; }\n        .px-24 { padding-left:24px !important; padding-right:24px !important; }\n        .py-24 { padding-top:24px !important; padding-bottom:24px !important; }\n        .stack { display:block !important; width:100% !important; }\n        .text-center { text-align:center !important; }\n      }\n    </style>\n  </head>\n  <body style=\"background-color:#F7F6F3; margin:0; padding:0;\">\n    <!-- Preheader (hidden) -->\n    <div style=\"display:none; font-size:1px; color:#F7F6F3; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;\">\n      Thank you again for your application—please choose an interview time that suits you.\n    </div>\n\n    <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" bgcolor=\"#F7F6F3\">\n      <tr>\n        <td align=\"center\" style=\"padding:24px;\">\n          <!-- Card -->\n          <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" class=\"container\" style=\"width:600px; max-width:100%; background-color:#FFFFFF; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06);\">\n            <!-- Accent bar -->\n            <tr>\n              <td style=\"background:linear-gradient(90deg, #F2D28A 0%, #E0A53A 50%, #C78623 100%); height:6px; font-size:0; line-height:0;\">&nbsp;</td>\n            </tr>\n\n            <!-- Header -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:28px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;\">\n                <div style=\"text-align:center;\">\n                  <div style=\"color:#9A7A3C; text-transform:uppercase; letter-spacing:1.6px; font-weight:600; font-size:12px;\">Your Organisation</div>\n                  <h1 style=\"margin:10px 0 0 0; font-size:26px; line-height:1.35; color:#1D3557; font-weight:700;\">\n                    Invitation to Interview\n                  </h1>\n                </div>\n              </td>\n            </tr>\n\n            <!-- Body copy -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:14px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">Dear {{ $json.firstName }},</p>\n                <p style=\"margin:0 0 12px 0;\">\n                  Thank you again for your application. We’re pleased to invite you to an interview.\n                </p>\n                <p style=\"margin:0 0 22px 0;\">\n                  Please choose a time that suits you using the link below. The interview will last around 30–45 minutes.\n                </p>\n              </td>\n            </tr>\n\n            <!-- Button -->\n            <tr>\n              <td align=\"center\" style=\"padding:4px 32px 0 32px;\">\n                <!--[if mso]>\n                <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" href=\"https://example.com/booking\" style=\"height:48px;v-text-anchor:middle;width:320px;\" arcsize=\"8%\" strokecolor=\"#1D3557\" fillcolor=\"#1D3557\">\n                  <w:anchorlock/>\n                  <center style=\"color:#FFFFFF;font-family:Segoe UI, Arial, sans-serif;font-size:16px;font-weight:bold;\">\n                    Choose your interview slot\n                  </center>\n                </v:roundrect>\n                <![endif]-->\n                <!--[if !mso]><!-- -->\n                <a class=\"button\" href=\"https://calendar.app.google/R7CoWEu8ioPnaSpm6\"\n                   target=\"_blank\" rel=\"noopener noreferrer\"\n                   style=\"display:inline-block; background-color:#1D3557; color:#FFFFFF; font-weight:700; font-size:16px; line-height:48px; height:48px; padding:0 28px; border-radius:8px; border:1px solid #1D3557; text-align:center;\">\n                  Choose your interview slot\n                </a>\n                <!--<![endif]-->\n              </td>\n            </tr>\n\n            <!-- Secondary info -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:18px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#4B5563; font-size:14px; line-height:1.7;\">\n                <ul style=\"padding-left:20px; margin:0 0 14px 0;\">\n                  <li style=\"margin:0 0 8px 0;\">You’ll receive a confirmation and calendar invite after booking.</li>\n                  <li style=\"margin:0 0 8px 0;\">If you can’t find a suitable time, just reply to this email and we’ll help.</li>\n                  <li style=\"margin:0;\">If you need any adjustments for the interview, let us know.</li>\n                </ul>\n              </td>\n            </tr>\n\n            <!-- Plain link fallback -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:10px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#6B7280; font-size:13px; line-height:1.6;\">\n                If the button doesn’t work, copy and paste this link into your browser:\n                <br>\n                <a href=\"https://calendar.app.google/R7CoWEu8ioPnaSpm6\"\n                   target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#1D3557; word-break:break-all;\">\n                  https://calendar.app.google/R7CoWEu8ioPnaSpm6\n                </a>\n              </td>\n            </tr>\n\n            <!-- Closing -->\n            <tr>\n              <td class=\"px-24 py-24\" style=\"padding:22px 32px 28px 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">We look forward to meeting you.</p>\n                <p style=\"margin:0;\">\n                  With warm wishes,<br>\n                  Recruitment Team\n                </p>\n              </td>\n            </tr>\n\n            <!-- Footer -->\n            <tr>\n              <td style=\"background-color:#FBFAF7; padding:16px 20px; text-align:center; border-top:1px solid #F1EDE5;\">\n                <div style=\"font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#8B7353; font-size:12px; line-height:1.6;\">\n                  This message was sent by our organisation. If you received it by mistake, please disregard.\n                </div>\n              </td>\n            </tr>\n          </table>\n\n          <!-- Spacer -->\n          <div style=\"height:32px; line-height:32px; font-size:32px;\">&nbsp;</div>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        -288
+      ],
+      "id": "0ac8748d-4c53-4001-a8e4-db29aa10ad65",
+      "name": "Prepare interview email template",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Query CRM for most up to date data').item.json.fields.Email.Description }}",
+        "subject": "Interview Invitation",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        -288
+      ],
+      "id": "7b3646c9-9a64-4f77-8af7-10b1d85e586e",
+      "name": "Send invite to interview email to applicant",
+      "webhookId": "5b888f5f-4f88-4531-a016-38c909cbd7fe",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CNYx8lhu7TPot4VT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://yourTenantName.sharepoint.com/Sites/yourSiteName/_api/web/lists/getbytitle('yourListName')/items({{ $('Receive hire decision from any source').item.json.params.itemId }})",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=verbose"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "If-Match",
+              "value": "*"
+            },
+            {
+              "name": "X-HTTP-Method",
+              "value": "MERGE"
+            },
+            {
+              "name": "X-RequestDigest",
+              "value": "{form_digest_value}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Status",
+              "value": "Interview Stage"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "d945162b-d4fd-4569-b924-f026cb204fdf",
+      "name": "Move to interview stage in CRM",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.microsoft.com/v1.0/sites/yourSiteId/lists/yourListId/items/{{ $('Receive hire decision from any source').item.json.params.itemId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1072,
+        400
+      ],
+      "id": "aa8320b2-a9c5-433b-8057-c0c85db493a1",
+      "name": "Query CRM for most up to date data",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "3V9p029G3kthk4EQ",
+          "name": "Sharepoint"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "94c95594-57c9-46d5-8df6-8bb96e1c4cd3",
+              "name": "executionId",
+              "value": "={{$execution.id}}",
+              "type": "string"
+            },
+            {
+              "id": "d1f1bb7e-4506-4c6b-abaa-d3565d6d363f",
+              "name": "cancelUrl",
+              "value": "=/webhook/cancel-action?executionId={{$execution.id}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1744,
+        400
+      ],
+      "id": "590a7645-3437-4e71-9a58-ebf9a7cf2f72",
+      "name": "Set cancel webhook URL"
+    },
+    {
+      "parameters": {
+        "content": "## Cancel Action Flow",
+        "height": 528,
+        "width": 1264,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1680,
+        1440
+      ],
+      "typeVersion": 1,
+      "id": "ca859f94-fbb1-4ebd-910e-f3df9daa11b6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "In reality, these would run sub-workflows, for better error handling and separation of concerns.\n\nI've combined them here so it's easier for you look through.",
+        "height": 352,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "7a54ed1d-5133-462d-830d-66310765b454",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Some APIs return an array nested nested in an object for example, meaning we have to use custom code to split into individual items, rather than the built-in n8n node.",
+        "height": 288,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        1088
+      ],
+      "typeVersion": 1,
+      "id": "45db85bd-9ea8-4e7e-91b2-6c7952107cac",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<html><body style=\"font-family:sans-serif\"><p>Too late — processing already started or finished.</p></body></html>",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              },
+              {
+                "name": "charset",
+                "value": "utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -640,
+        1520
+      ],
+      "id": "b13d35cf-4ee8-4e33-bc71-fcafd16a081b",
+      "name": "Yes, respond appropriately"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<html><body style=\"font-family:sans-serif\"><p>Okay, your request was canceled.</p></body></html>",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html"
+              },
+              {
+                "name": "charset",
+                "value": "utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -640,
+        1712
+      ],
+      "id": "ef59e94e-4466-4b4a-9800-25ab1f8f7cd1",
+      "name": "No, respond confirming request cancelled"
+    },
+    {
+      "parameters": {
+        "content": "To programatically add hyperlinks in Sharepoint lists we need to use the Sharepoint REST API, Microsoft graph won't work.",
+        "height": 304,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1168,
+        1104
+      ],
+      "typeVersion": 1,
+      "id": "3e827baf-860d-4273-b78e-7a579cae437a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "html": "<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <title>Welcome & Onboarding</title>\n    <style type=\"text/css\">\n      /* Reset + client fixes */\n      html, body { margin:0 !important; padding:0 !important; height:100% !important; width:100% !important; }\n      * { -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%; }\n      table, td { mso-table-lspace:0pt !important; mso-table-rspace:0pt !important; }\n      table { border-spacing:0 !important; border-collapse:collapse !important; table-layout:fixed !important; margin:0 auto !important; }\n      img { -ms-interpolation-mode:bicubic; border:0; outline:none; text-decoration:none; }\n      a { text-decoration:none; }\n      a[x-apple-data-detectors], .unstyle-auto-detected-links a, .aBn { border-bottom:0 !important; text-decoration:none !important; color:inherit !important; }\n      .button:hover { filter: brightness(1.05); }\n      /* Mobile styles */\n      @media screen and (max-width: 600px) {\n        .container { width:100% !important; }\n        .px-24 { padding-left:24px !important; padding-right:24px !important; }\n        .py-24 { padding-top:24px !important; padding-bottom:24px !important; }\n        .stack { display:block !important; width:100% !important; }\n        .text-center { text-align:center !important; }\n      }\n    </style>\n  </head>\n  <body style=\"background-color:#F7F6F3; margin:0; padding:0;\">\n    <!-- Preheader (hidden) -->\n    <div style=\"display:none; font-size:1px; color:#F7F6F3; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;\">\n      Welcome aboard! Here are your onboarding details, key dates, and next steps.\n    </div>\n\n    <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" bgcolor=\"#F7F6F3\">\n      <tr>\n        <td align=\"center\" style=\"padding:24px;\">\n          <!-- Card -->\n          <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" class=\"container\" style=\"width:600px; max-width:100%; background-color:#FFFFFF; border-radius:12px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.06);\">\n            <!-- Accent bar -->\n            <tr>\n              <td style=\"background:linear-gradient(90deg, #F2D28A 0%, #E0A53A 50%, #C78623 100%); height:6px; font-size:0; line-height:0;\">&nbsp;</td>\n            </tr>\n\n            <!-- Header -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:28px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;\">\n                <div style=\"text-align:center;\">\n                  <div style=\"color:#9A7A3C; text-transform:uppercase; letter-spacing:1.6px; font-weight:600; font-size:12px;\">Your Organisation</div>\n                  <h1 style=\"margin:10px 0 0 0; font-size:26px; line-height:1.35; color:#1D3557; font-weight:700;\">\n                    Welcome Aboard!\n                  </h1>\n                  <p style=\"margin:8px 0 0 0; color:#4B5563; font-size:14px; line-height:1.7;\">\n                    We’re delighted to confirm your acceptance and share your onboarding steps.\n                  </p>\n                </div>\n              </td>\n            </tr>\n\n            <!-- Intro -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:16px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">Dear {{ $json.firstName }},</p>\n                <p style=\"margin:0 0 12px 0;\">\n                  Congratulations and welcome to the team! You’ll be joining us as\n                  <strong>{{ $json.role || 'your new role' }}</strong>, starting\n                  <strong>{{ $json.startDate || 'your start date' }}</strong>.\n                </p>\n                <p style=\"margin:0 0 12px 0;\">\n                  Below are your key details and the actions to complete before day one.\n                </p>\n              </td>\n            </tr>\n\n            <!-- Key details -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:8px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;\">\n                <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border:1px solid #F1EDE5; border-radius:10px; background:#FBFAF7;\">\n                  <tr>\n                    <td class=\"stack\" style=\"padding:14px 16px; width:50%; font-size:14px; color:#374151;\">\n                      <div style=\"font-weight:700; color:#1D3557; margin-bottom:4px;\">Start</div>\n                      {{ $json.startDate || 'TBD' }}{{ $json.startTime ? (' — ' + $json.startTime) : '' }}\n                    </td>\n                    <td class=\"stack\" style=\"padding:14px 16px; width:50%; font-size:14px; color:#374151; border-left:1px solid #F1EDE5;\">\n                      <div style=\"font-weight:700; color:#1D3557; margin-bottom:4px;\">Location</div>\n                      {{ $json.location || 'We’ll confirm your reporting location' }}\n                    </td>\n                  </tr>\n                  <tr>\n                    <td class=\"stack\" style=\"padding:14px 16px; width:50%; font-size:14px; color:#374151; border-top:1px solid #F1EDE5;\">\n                      <div style=\"font-weight:700; color:#1D3557; margin-bottom:4px;\">Manager</div>\n                      {{ $json.managerName || 'Your manager' }}{{ $json.managerEmail ? (' — ' + $json.managerEmail) : '' }}\n                    </td>\n                    <td class=\"stack\" style=\"padding:14px 16px; width:50%; font-size:14px; color:#374151; border-left:1px solid #F1EDE5; border-top:1px solid #F1EDE5;\">\n                      <div style=\"font-weight:700; color:#1D3557; margin-bottom:4px;\">What to bring</div>\n                      {{ $json.docsToBring || 'Photo ID, right-to-work docs, bank details, emergency contact' }}\n                    </td>\n                  </tr>\n                </table>\n              </td>\n            </tr>\n\n            <!-- Primary Button -->\n            <tr>\n              <td align=\"center\" style=\"padding:18px 32px 0 32px;\">\n                <!--[if mso]>\n                <v:roundrect xmlns:v=\"urn:schemas-microsoft-com:vml\" href=\"{{ $json.onboardingLink || 'https://example.com/onboarding' }}\" style=\"height:48px;v-text-anchor:middle;width:320px;\" arcsize=\"8%\" strokecolor=\"#1D3557\" fillcolor=\"#1D3557\">\n                  <w:anchorlock/>\n                  <center style=\"color:#FFFFFF;font-family:Segoe UI, Arial, sans-serif;font-size:16px;font-weight:bold;\">\n                    Start your onboarding\n                  </center>\n                </v:roundrect>\n                <![endif]-->\n                <!--[if !mso]><!-- -->\n                <a class=\"button\" href=\"{{ $json.onboardingLink || 'https://example.com/onboarding' }}\"\n                   target=\"_blank\" rel=\"noopener noreferrer\"\n                   style=\"display:inline-block; background-color:#1D3557; color:#FFFFFF; font-weight:700; font-size:16px; line-height:48px; height:48px; padding:0 28px; border-radius:8px; border:1px solid #1D3557; text-align:center;\">\n                  Start your onboarding\n                </a>\n                <!--<![endif]-->\n              </td>\n            </tr>\n\n            <!-- Next steps -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:18px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#4B5563; font-size:14px; line-height:1.7;\">\n                <div style=\"font-size:15px; color:#1D3557; font-weight:700; margin:0 0 8px 0;\">Your next steps</div>\n                <ul style=\"padding-left:20px; margin:0 0 12px 0;\">\n                  <li style=\"margin:0 0 8px 0;\">Complete the onboarding form (personal details, emergency contact).</li>\n                  <li style=\"margin:0 0 8px 0;\">Upload any required documents (ID / right-to-work / certifications).</li>\n                  <li style=\"margin:0 0 8px 0;\">Review and sign policies/agreements in the portal.</li>\n                  <li style=\"margin:0 0 8px 0;\">Set up your accounts using the invitations we’ll send (email, chat, tools).</li>\n                  <li style=\"margin:0;\">Check your first-day schedule and meeting invites.</li>\n                </ul>\n              </td>\n            </tr>\n\n            <!-- Plain link fallback -->\n            <tr>\n              <td class=\"px-24\" style=\"padding:10px 32px 0 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#6B7280; font-size:13px; line-height:1.6;\">\n                If the button doesn’t work, copy and paste this link into your browser:\n                <br>\n                <a href=\"{{ $json.onboardingLink || 'https://example.com/onboarding' }}\"\n                   target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#1D3557; word-break:break-all;\">\n                  {{ $json.onboardingLink || 'https://example.com/onboarding' }}\n                </a>\n              </td>\n            </tr>\n\n            <!-- Closing -->\n            <tr>\n              <td class=\"px-24 py-24\" style=\"padding:22px 32px 28px 32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2C2C2C; font-size:16px; line-height:1.6;\">\n                <p style=\"margin:0 0 12px 0;\">We’re excited to have you with us, {{ $json.firstName }}.</p>\n                <p style=\"margin:0 0 12px 0;\">\n                  If you have any questions, reply to this email or contact\n                  <a href=\"mailto:{{ $json.hrEmail || 'people@example.com' }}\" style=\"color:#1D3557;\">\n                    {{ $json.hrEmail || 'people@example.com' }}\n                  </a>.\n                </p>\n                <p style=\"margin:0;\">\n                  With warm wishes,<br>\n                  People & Operations Team\n                </p>\n              </td>\n            </tr>\n\n            <!-- Footer -->\n            <tr>\n              <td style=\"background-color:#FBFAF7; padding:16px 20px; text-align:center; border-top:1px solid #F1EDE5;\">\n                <div style=\"font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#8B7353; font-size:12px; line-height:1.6;\">\n                  This message was sent by our organisation. If you received it by mistake, please disregard.\n                </div>\n              </td>\n            </tr>\n          </table>\n\n          <!-- Spacer -->\n          <div style=\"height:32px; line-height:32px; font-size:32px;\">&nbsp;</div>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        912
+      ],
+      "id": "6de71915-8f90-45f8-860e-4881204b50d9",
+      "name": "Prepare fully accept email template"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cbdb3ebd-aa39-48de-9dd4-23c764d94467",
+              "leftValue": "={{ $json.error.toLowerCase() }}",
+              "rightValue": "the user already exists",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        272,
+        1680
+      ],
+      "id": "32c8491c-dbe3-4f86-aec6-e507afbfffb6",
+      "name": "Username is available?"
+    },
+    {
+      "parameters": {
+        "sendTo": "=it@example.com",
+        "subject": "Fully Accept Worflow Error: Tried to Create Duplicate User in Entra",
+        "emailType": "text",
+        "message": "=Fully Accept Worflow Error:\n\n{{ $json['Volunteer First Name'] }}.{{ $json['Volunteer Last Name'] }}@example.com already exists in Entra. Please decide on the best unique User Pricinple Name (email address) and manually create the user, with their account set as deactivated.",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        496,
+        1776
+      ],
+      "id": "b8be8b24-6c0e-4636-a4f1-c731ff2475e0",
+      "name": "No, Inform IT of issue",
+      "webhookId": "bc2eb193-a30b-4c26-82bd-b6a02cdac1c2",
+      "retryOnFail": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CNYx8lhu7TPot4VT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://yourTenantId.sharepoint.com/Sites/yourSiteId/_api/web/lists/getbytitle('yourListId')/items",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json;odata=nometadata"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json;odata=nometadata"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"Title\": \"{{ $('Receive hire decision from any source').item.json.params.firstName }} + {{ $('Receive hire decision from any source').item.json.params.lastName }}\",\n  \"Progress\": \"{{ $('Aggregate').item.json.forProgressField.join('') }}\",\n  \"Email\": {\n    \"Description\": \"{{ $('Receive hire decision from any source').item.json.params.email }}\",\n    \"Url\": \"mailto:{{ $('Receive hire decision from any source').item.json.params.email }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1248,
+        1232
+      ],
+      "id": "132b07e4-7d6c-4750-8691-62e7b024378b",
+      "name": "Add to onboarding progress list",
+      "retryOnFail": true,
+      "credentials": {
+        "oAuth2Api": {
+          "id": "3V9p029G3kthk4EQ",
+          "name": "Sharepoint"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "604bbb30-3103-4724-b6d1-3cdbbeee53fc",
+              "leftValue": "={{ $json.finished }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -864,
+        1616
+      ],
+      "id": "c757b151-cfc9-45d2-9e31-6159d1d01862",
+      "name": "Processing done or in progress?"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1296,
+        400
+      ],
+      "id": "44977618-366f-42bc-9f18-19ecb247fe50",
+      "name": "Give time for a cancel request",
+      "webhookId": "bc789fa7-697c-44e5-9557-e6c6e92750c3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Error details:\n{{ $('Error trigger').item.json.toJsonString()}}\n\nFull details of what succesfully happened in the errored workflow and what didn't happen because of the error (including downstream from the error):\n{{ $json.runData.toJsonString() }}\n\nCurrent time:\n{{ $now }}",
+        "options": {
+          "systemMessage": "=You are an error handler agent. You have 3 tools available to you. Please analyse the error and decide on what should be queried and done to resolve it.\n\n1. Use the Microsoft Graph GET request tool to figure out the root cause. If you don't know the URL you need, use the Microsoft Learn MCP client tool to figure out how to construct the correct URL.\nIf you could fix the issue:\n2.1 Send an informational email about what you did.\nIf you couldn't fix the issue:\n2.2 Send an email detailing the issue and reccomended actions with reasoning and proof for your reccomendations. Make sure to include what succesfully happened in the errored workflow and what didn't happen because of the error, including downstream from the error.\n\nNote that only 1 email should be sent.\nPlease make the emails graphically interesting, and easy to understand, use diagrams where relevant. But they should always bisplay properly in email clients.\n\nFinally, be efficient with token usage, we are on a budget, so no need to repeat steps if you are already confident etc etc."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        880
+      ],
+      "id": "c3a8d22a-c578-4fa4-a288-a7243c6a181d",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "options": {
+          "reasoningEffort": "high",
+          "timeout": 600000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1248,
+        1056
+      ],
+      "id": "73d029d5-2314-43b2-86c2-941bf4ab759d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "uQUYf9117CGvnM8U",
+          "name": "Personal OpenAI Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.workflow.id }}-{{ $json.execution.id }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1088,
+        1056
+      ],
+      "id": "028e6d41-4b21-4240-b600-5edb727554a8",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://learn.microsoft.com/api/mcp",
+        "serverTransport": "httpStreamable",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        -928,
+        1168
+      ],
+      "id": "9f2492a1-6561-4869-b3b9-0975672f1110",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Makes an HTTP GET request to Microsfot Graph and returns the response data",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "options": {},
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -800,
+        1168
+      ],
+      "id": "7de6f723-6134-4ef9-8b3b-55e26d18c631",
+      "name": "Microsoft Graph HTTP GET Request",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "izPgayzdowxCDrv0",
+          "name": "Microsoft"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## AI Error Handler Flow\n### In reality it's the specific Error trigger node rather than \n### the webhook that would be used in a separate generic workflow.\n### I wanted to include everything in one blueprint for this demo.\n",
+        "height": 688,
+        "width": 1536,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1952,
+        704
+      ],
+      "typeVersion": 1,
+      "id": "89e3956f-0b70-40d7-a713-7a3407544ad3",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "### Microsoft Graph Tool (MCP Docs + Request Node) - duplicate for other APIs as desired.",
+        "height": 256,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -976,
+        1056
+      ],
+      "typeVersion": 1,
+      "id": "5472c3ef-6ebd-40dd-976d-912725b93dd3",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Send a email. The body must be HTML. Note that you can't receive responses from the email so please don't say in your message that one can respond.",
+        "sendTo": "nicholas@nicholashennellfoley.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -560,
+        1056
+      ],
+      "id": "42f71643-3c39-4d7c-8a95-9708cf0a5a48",
+      "name": "Send Triage / Resolution Email to IT",
+      "webhookId": "6c9f4fd6-0155-4271-9bef-9f6e02faf6c6",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "CNYx8lhu7TPot4VT",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "execution",
+        "operation": "get",
+        "executionId": "={{ $json.execution.id }}",
+        "options": {
+          "activeWorkflows": true
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        -1584,
+        880
+      ],
+      "id": "88bdf172-48ef-4261-a6f1-fb8da0826c02",
+      "name": "Get execution of errored workflow",
+      "credentials": {
+        "n8nApi": {
+          "id": "EhVx6qkRChdEKDL0",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the runData object from the input item\nconst runData = items[0].json.data.resultData.runData;\n\n// Prepare an array for the output\nlet results = [];\n\n// Loop over each key (the node name) in the runData object\nfor (const name in runData) {\n  // Check if the property belongs to the object\n  if (runData.hasOwnProperty(name)) {\n    // Get the first execution details for the node\n    const execution = runData[name][0];\n\n    // Create a new object with the desired format and add it to our results array\n    if (execution) {\n      results.push({\n        nodeName: name,\n        executionStatus: execution.executionStatus,\n        executionIndex: execution.executionIndex,\n      });\n    }\n  }\n}\n\n// Sort the array based on the executionIndex\nresults.sort((a, b) => a.executionIndex - b.executionIndex);\n\n// Return a single item with the results nested under \"runData\"\nreturn [{\n  json: {\n    runData: results\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1360,
+        880
+      ],
+      "id": "cffdf72b-3253-49e8-981e-972056ddef0c",
+      "name": "Format & sort execution data"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1808,
+        880
+      ],
+      "id": "f4a24087-37ac-4634-9f08-5a6df81f3615",
+      "name": "Error trigger"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "error-handler",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1808,
+        1040
+      ],
+      "id": "f80f7be6-8880-4c60-a6a9-2967478d66f8",
+      "name": "Webhook error trigger (demo)",
+      "webhookId": "61690421-05f6-4f4e-93f7-8294d4516bb8",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        480
+      ],
+      "id": "11adcfeb-f3da-43c9-a1b4-a7ebe37d7f30",
+      "name": "Send to AI Error Handler flow (1)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        -16
+      ],
+      "id": "8c8634a6-4547-4639-9fa5-42eac35ced20",
+      "name": "Send to AI Error Handler flow (2)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        576
+      ],
+      "id": "3a97bb5a-9b56-4931-bbda-0264ead77dc5",
+      "name": "Send to AI Error Handler flow (3)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "n8n runs branches top to bottom, and in our case the order of operations does matter: We always want the applicant to be emailed, we don't want a workflow-stopping error to prevent that. Though with proper error handling an error is unlikely to stop the whole flow. ",
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "3dd430da-3ef7-402c-87d7-68ff40044ec2",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        48,
+        1456
+      ],
+      "id": "b542672b-c1db-48e1-9210-5f51dd3ea6cc",
+      "name": "Send to AI Error Handler flow (4)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        512,
+        1456
+      ],
+      "id": "c003ddb8-6c8e-45ce-91bd-e5a61e9ed1c9",
+      "name": "Send to AI Error Handler flow (5)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1456,
+        1456
+      ],
+      "id": "226eaef5-08f2-4d9e-a051-0a645e93d4c6",
+      "name": "Send to AI Error Handler flow (6)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.nicholashennellfoley.com/webhook/error-handler",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=errorDetails",
+              "value": "={{ $json.error }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1728,
+        1456
+      ],
+      "id": "b6f12a14-78e6-4855-8a72-d9452c093576",
+      "name": "Send to AI Error Handler flow (7)",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "iHiEEewHFDeJ6L1T",
+          "name": "Gravity Forms"
+        },
+        "httpBearerAuth": {
+          "id": "ke14sdSxIvIPXuqb",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "N5v1HsavC95vlDkZ",
+          "name": "Header Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Move to interview stage in CRM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare interview email template",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Move to declined stage in CRM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare decline email template",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get onboarding training module pages",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate temp password",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Prepare fully accept email template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Add to onboarding progress list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File embeds only": {
+      "main": [
+        [
+          {
+            "node": "Prep text for training progress list",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive hire decision from any source": {
+      "main": [
+        [
+          {
+            "node": "Set cancel webhook URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receive cancel action request": {
+      "main": [
+        [
+          {
+            "node": "Request contains execution ID?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request contains execution ID?": {
+      "main": [
+        [
+          {
+            "node": "Yes, stop the execution",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No, respond appropriately",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yes, stop the execution": {
+      "main": [
+        [
+          {
+            "node": "Processing done or in progress?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond: Confirmation + cancel option": {
+      "main": [
+        [
+          {
+            "node": "Give time for a cancel request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate temp password": {
+      "main": [
+        [
+          {
+            "node": "Create user in Microsoft, don't enable account",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Allow data to be iterated": {
+      "main": [
+        [
+          {
+            "node": "List sharepoint webparts on page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get onboarding training module pages": {
+      "main": [
+        [
+          {
+            "node": "Allow data to be iterated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to AI Error Handler flow (4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List sharepoint webparts on page": {
+      "main": [
+        [
+          {
+            "node": "File embeds only",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to AI Error Handler flow (5)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep text for training progress list": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare decline email template": {
+      "main": [
+        [
+          {
+            "node": "Send decline email to applicant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare interview email template": {
+      "main": [
+        [
+          {
+            "node": "Send invite to interview email to applicant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send invite to interview email to applicant": {
+      "main": [
+        []
+      ]
+    },
+    "Query CRM for most up to date data": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to AI Error Handler flow (1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set cancel webhook URL": {
+      "main": [
+        [
+          {
+            "node": "Respond: Confirmation + cancel option",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare fully accept email template": {
+      "main": [
+        [
+          {
+            "node": "Email welcome and onboarding instructions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create user in Microsoft, don't enable account": {
+      "main": [
+        [
+          {
+            "node": "Username is available?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Username is available?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "No, Inform IT of issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to onboarding progress list": {
+      "main": [
+        [
+          {
+            "node": "Set processed flag in CRM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send to AI Error Handler flow (6)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Processing done or in progress?": {
+      "main": [
+        [
+          {
+            "node": "Yes, respond appropriately",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No, respond confirming request cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Give time for a cancel request": {
+      "main": [
+        [
+          {
+            "node": "Query CRM for most up to date data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Microsoft Graph HTTP GET Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Triage / Resolution Email to IT": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get execution of errored workflow": {
+      "main": [
+        [
+          {
+            "node": "Format & sort execution data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format & sort execution data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error trigger": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook error trigger (demo)": {
+      "main": [
+        [
+          {
+            "node": "Get execution of errored workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move to interview stage in CRM": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send to AI Error Handler flow (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move to declined stage in CRM": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send to AI Error Handler flow (3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set processed flag in CRM": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Send to AI Error Handler flow (7)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6bb4298b-72eb-4d3c-921d-27e20a397190",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "88047c857db9f67cb84ed092b790b3290514fc9bebb2c732e16033d5e0dcd065"
+  },
+  "id": "zL7YG7WaVHokFjF3",
+  "tags": []
+}
