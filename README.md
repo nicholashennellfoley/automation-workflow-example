@@ -47,4 +47,5 @@ OAuth2 creds for Microsoft/SharePoint/Gmail, retryOnFail on external calls, defe
 # Why
 Hopefully it demonstrates some of what you're looking for!
 
-It shows connecting APIs, routing/cleaning data, human-safe control (cancel window), and production-grade resilience (idempotency, retries, AI-assisted triage). The same patterns could port cleanly to Airtable/Apollo/Instantly/MillionVerifier/Leadmagic/Icypeasas required. My background is specifically in building these kinds of production systems, with code nodes where required, webhooks, OAuth, and robust documentation.
+It shows connecting APIs, routing/cleaning data, human-safe control (cancel window), and production-grade resilience (idempotency, retries, AI-assisted triage). The same patterns could port cleanly to any other APIs (Airtable etc) as required.
+My background is specifically in building these kinds of production systems, with code nodes where required, webhooks, OAuth, and robust documentation.
