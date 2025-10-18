@@ -1,17 +1,19 @@
 ![Screenshot of workflow](Screenshot%20of%20Workflow%20-%20Nicholas%20Hennell-Foley.png)
+**To see the full resolution, right click on the image to open it in a new tab or download it**.
 
-# Download
+
+# Download n8n Workflow
 [https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json](https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json)
 
 Import to a blank n8n canvas.
 
-# WHAT
+# What
 Hire decision → CRM update → Candidate comms → IT provisioning. With a reversible cancel window + AI error-handler.
 
-# PURPOSE
+# Purpose
 Centralise hiring outcomes coming from any system (for example a form or CRM), then—based on the decision—update the CRM, email the candidate, and (on full acceptance) kick off IT onboarding. The flow is resilient (retry logic, reversible “cancel” window) and observable (AI triage on errors), which maps well to cross-functional ops where accuracy and speed matter.
 
-# HOW
+# How
 1. Intake + reversible window
 A Webhook node (Receive hire decision from any source) accepts a POST with decision, itemId, firstName, lastName, email, etc. It immediately returns an HTML confirmation including a Cancel button. Internally I add a cancelUrl with the current $execution.id, then a Wait node gives stakeholders a grace period. If a second webhook (cancel-action) arrives with that executionId, the n8n API stops the execution and replies “request cancelled”; if processing already started, it replies accordingly. This creates a safe, human-in-the-loop “Wait + Cancel” pattern.
 
@@ -42,7 +44,7 @@ After the window, an HTTP Request to SharePoint/Graph (Query CRM for most up to 
 6. Good n8n hygiene
 OAuth2 creds for Microsoft/SharePoint/Gmail, retryOnFail on external calls, defensive Filter/If checks, and modular sections (noted in sticky comments) so these blocks can be promoted into sub-workflows for reuse across teams.
 
-# WHY
+# Why
 Hopefully it demonstrates some of what you're looking for!
 
 It shows connecting APIs, routing/cleaning data, human-safe control (cancel window), and production-grade resilience (idempotency, retries, AI-assisted triage). The same patterns could port cleanly to Airtable/Apollo/Instantly/MillionVerifier/Leadmagic/Icypeasas required. My background is specifically in building these kinds of production systems, with code nodes where required, webhooks, OAuth, and robust documentation.
