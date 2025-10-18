@@ -1,3 +1,5 @@
+![Screenshot of workflow](Screenshot%20of%20Workflow%20-%20Nicholas%20Hennell-Foley.png)
+
 # Download
 [https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json](https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json)
 
