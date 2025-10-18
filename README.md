@@ -1,3 +1,8 @@
+# Download
+[https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json](https://github.com/nicholashennellfoley/automation-workflow-example/blob/main/n8n%20Blueprint%20-%20Nicholas%20Hennell-Foley.json)
+
+Import to a blank n8n canvas.
+
 # WHAT
 Hire decision → CRM update → Candidate comms → IT provisioning. With a reversible cancel window + AI error-handler.
 
