@@ -1,5 +1,5 @@
 ![Screenshot of workflow](Screenshot%20of%20Workflow%20-%20Nicholas%20Hennell-Foley.png)
-**To see the full resolution, right click on the image to open it in a new tab or download it**.
+**To see the full resolution, right click on the image and choose "Open image in new tab", or download it**.
 
 
 # Download n8n Workflow
